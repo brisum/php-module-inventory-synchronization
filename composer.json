@@ -1,0 +1,22 @@
+{
+  "name": "brisum/module-inventory-synchronization",
+  "description": "Inventory synchronization",
+  "keywords": [
+    "inventory",
+    "synchronization"
+  ],
+  "homepage": "https://github.com/brisum/php-module-inventory-synchronization",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oleksandr Manchenko",
+      "email": "omanchenko@brisum.com",
+      "homepage": "http://brisum.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Brisum\\InventorySynchronization\\": "src/"
+    }
+  }
+}

@@ -7,7 +7,7 @@ interface SupplierInterface {
 	 * Fetch inventory files
 	 *
 	 * @param string $destDir
-	 * @return array
+	 * @return void
 	 */
 	function fetch($destDir);
 
@@ -31,13 +31,21 @@ interface SupplierInterface {
 	function match($srcFile, $destFileMatched, $destFileNew);
 
 	/**
-	 * Create updating data of item
-	 *
-	 * @param array $item
-	 * @param array $itemInformation
-	 * @return array
-	 */
-	function createUpdating(array $item, array $itemInformation);
+	 * Create updating data
+     *
+     * @param $srcFile
+     * @param $destFile
+     * @return void
+     */
+	function createUpdating($srcFile, $destFile);
+
+    /**
+     * Update inventory
+     *
+     * @param string $srcFile
+     * @return void
+     */
+	function update($srcFile);
 
 	/**
 	 * Create new item
@@ -47,12 +55,4 @@ interface SupplierInterface {
 	 * @return mixed
 	 */
 	function createItem($srcFile, $destFileManual);
-
-	/**
-	 * Get brand of item
-	 *
-	 * @param array $itemInformation
-	 * @return string
-	 */
-	function getBrand(array $itemInformation);
 }

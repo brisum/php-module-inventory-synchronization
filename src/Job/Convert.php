@@ -14,7 +14,7 @@ class Convert implements JobInterface
 	/**
 	 * @var InventorySynchronization
 	 */
-	protected $syncInventory;
+	protected $inventorySynchronization;
 
 	/**
 	 * @var SupplierFactoryInterface
@@ -22,15 +22,17 @@ class Convert implements JobInterface
 	protected $supplierFactory;
 
 	/**
-	 * ConvertInventory constructor.
-	 * @param InventorySynchronization $syncInventory
+	 * Convert constructor.
+	 * @param InventorySynchronization $inventorySynchronization
 	 * @param SupplierFactoryInterface $supplierFactory
 	 */
-	public function __construct(InventorySynchronization $syncInventory, SupplierFactoryInterface $supplierFactory)
-	{
-		$this->syncInventory = $syncInventory;
-		$this->supplierFactory = $supplierFactory;
-	}
+    public function __construct(
+        InventorySynchronization $inventorySynchronization,
+        SupplierFactoryInterface $supplierFactory
+    ) {
+        $this->inventorySynchronization = $inventorySynchronization;
+        $this->supplierFactory = $supplierFactory;
+    }
 
 	/**
 	 * @param string $supplierName
@@ -39,9 +41,9 @@ class Convert implements JobInterface
 	public function run($supplierName)
 	{
 		$supplier = $this->supplierFactory->create($supplierName);
-		$sourceInDir = $this->syncInventory->getSourceInDir($supplierName);
-		$sourceDoneDir = $this->syncInventory->getSourceDoneDir($supplierName);
-		$convertedInDir = $this->syncInventory->getConvertInDir($supplierName);
+		$sourceInDir = $this->inventorySynchronization->getSourceInDir($supplierName);
+		$sourceDoneDir = $this->inventorySynchronization->getSourceDoneDir($supplierName);
+		$convertedInDir = $this->inventorySynchronization->getConvertInDir($supplierName);
 
 		if (!is_dir($sourceDoneDir)) {
 			mkdir($sourceDoneDir, 0755, true);

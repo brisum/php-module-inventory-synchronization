@@ -14,7 +14,7 @@ class CreateItem implements JobInterface
 	/**
 	 * @var InventorySynchronization
 	 */
-	protected $syncInventory;
+	protected $inventorySynchronization;
 
 	/**
 	 * @var SupplierFactoryInterface
@@ -22,13 +22,15 @@ class CreateItem implements JobInterface
 	protected $supplierFactory;
 
 	/**
-	 * ConvertInventory constructor.
-	 * @param InventorySynchronization $syncInventory
+	 * CreateItem constructor.
+	 * @param InventorySynchronization $inventorySynchronization
 	 * @param SupplierFactoryInterface $supplierFactory
 	 */
-	public function __construct(InventorySynchronization $syncInventory, SupplierFactoryInterface $supplierFactory)
-	{
-		$this->syncInventory = $syncInventory;
+	public function __construct(
+	    InventorySynchronization $inventorySynchronization,
+        SupplierFactoryInterface $supplierFactory
+    ) {
+		$this->inventorySynchronization = $inventorySynchronization;
 		$this->supplierFactory = $supplierFactory;
 	}
 
@@ -39,9 +41,9 @@ class CreateItem implements JobInterface
 	public function run($supplierName)
 	{
 		$supplier = $this->supplierFactory->create($supplierName);
-		$newInDir = $this->syncInventory->getNewInDir($supplierName);
-		$newDoneDir = $this->syncInventory->getNewDoneDir($supplierName);
-		$newNotProcessedDir = $this->syncInventory->getNewNotProcessedDir($supplierName);
+		$newInDir = $this->inventorySynchronization->getNewInDir($supplierName);
+		$newDoneDir = $this->inventorySynchronization->getNewDoneDir($supplierName);
+		$newNotProcessedDir = $this->inventorySynchronization->getNewNotProcessedDir($supplierName);
 
 		if (!is_dir($newDoneDir)) {
 			mkdir($newDoneDir, 0755, true);
@@ -59,7 +61,7 @@ class CreateItem implements JobInterface
 
 			$supplier->createItem($newInFile, $newNotProcessedFile);
 			if (!rename($newInFile, $newDoneFile)) {
-				throw new \Exception(sprintf("Can't move file %s to %s directory.", $file->getFilename(), $newDoneDir));
+				throw new Exception(sprintf("Can't move file %s to %s directory.", $file->getFilename(), $newDoneDir));
 			}
 		}
 	}

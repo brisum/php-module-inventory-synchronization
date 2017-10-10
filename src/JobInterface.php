@@ -7,8 +7,8 @@ interface JobInterface
 	/**
 	 * Run job
 	 *
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return void
 	 */
-	function run($supplierName);
+	function run($dealerName);
 }

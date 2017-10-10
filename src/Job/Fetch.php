@@ -4,7 +4,7 @@ namespace Brisum\InventorySynchronization\Job;
 
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Exception;
 
 class Fetch implements JobInterface
@@ -15,36 +15,36 @@ class Fetch implements JobInterface
     protected $inventorySynchronization;
 
     /**
-     * @var SupplierFactoryInterface
+     * @var DealerFactoryInterface
      */
-    protected $supplierFactory;
+    protected $dealerFactory;
 
     /**
      * Fetch constructor.
      * @param InventorySynchronization $inventorySynchronization
-     * @param SupplierFactoryInterface $supplierFactory
+     * @param DealerFactoryInterface $dealerFactory
      */
     public function __construct(
         InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
         $this->inventorySynchronization = $inventorySynchronization;
-        $this->supplierFactory = $supplierFactory;
+        $this->dealerFactory = $dealerFactory;
     }
 
     /**
-     * @param string $supplierName
+     * @param string $dealerName
      * @throws Exception
      */
-    public function run($supplierName)
+    public function run($dealerName)
     {
-        $supplier = $this->supplierFactory->create($supplierName);
-        $sourceInDir = $this->inventorySynchronization->getSourceInDir($supplierName);
+        $dealer = $this->dealerFactory->create($dealerName);
+        $sourceInDir = $this->inventorySynchronization->getSourceInDir($dealerName);
 
 		if (!is_dir($sourceInDir)) {
 			mkdir($sourceInDir, 0755, true);
 		}
 
-		$supplier->fetch($sourceInDir);
+		$dealer->fetch($sourceInDir);
 	}
 }

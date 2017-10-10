@@ -4,7 +4,7 @@ namespace Brisum\InventorySynchronization\Job;
 
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Exception;
 use FilesystemIterator;
 use SplFileInfo;
@@ -17,32 +17,32 @@ class Update implements JobInterface
     protected $inventorySynchronization;
 
     /**
-     * @var SupplierFactoryInterface
+     * @var DealerFactoryInterface
      */
-    protected $supplierFactory;
+    protected $dealerFactory;
 
     /**
      * Update constructor.
      * @param InventorySynchronization $inventorySynchronization
-     * @param SupplierFactoryInterface $supplierFactory
+     * @param DealerFactoryInterface $dealerFactory
      */
     public function __construct(
         InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
         $this->inventorySynchronization = $inventorySynchronization;
-        $this->supplierFactory = $supplierFactory;
+        $this->dealerFactory = $dealerFactory;
     }
 
     /**
-     * @param string $supplierName
+     * @param string $dealerName
      * @throws Exception
      */
-    public function run($supplierName)
+    public function run($dealerName)
     {
-        $supplier = $this->supplierFactory->create($supplierName);
-        $updatingInDir = $this->inventorySynchronization->getUpdatingInDir($supplierName);
-        $updatingDoneDir = $this->inventorySynchronization->getUpdatingDoneDir($supplierName);
+        $dealer = $this->dealerFactory->create($dealerName);
+        $updatingInDir = $this->inventorySynchronization->getUpdatingInDir($dealerName);
+        $updatingDoneDir = $this->inventorySynchronization->getUpdatingDoneDir($dealerName);
 
         if (!is_dir($updatingDoneDir)) {
             mkdir($updatingDoneDir, 0755, true);
@@ -54,7 +54,7 @@ class Update implements JobInterface
             $updatingInFile = $file->getPathname();
             $updatingDoneFile = $updatingDoneDir . $file->getFilename();
 
-            $supplier->update($updatingInFile);
+            $dealer->update($updatingInFile);
             if (!rename($updatingInFile, $updatingDoneFile)) {
                 throw new \Exception(sprintf("Can not move file %s to %s directory.", $updatingInFile, $updatingDoneFile));
             }

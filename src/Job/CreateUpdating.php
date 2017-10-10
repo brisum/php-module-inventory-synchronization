@@ -4,7 +4,7 @@ namespace Brisum\InventorySynchronization\Job;
 
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Exception;
 use FilesystemIterator;
 use SplFileInfo;
@@ -17,33 +17,33 @@ class CreateUpdating implements JobInterface
     protected $inventorySynchronization;
 
     /**
-     * @var SupplierFactoryInterface
+     * @var DealerFactoryInterface
      */
-    protected $supplierFactory;
+    protected $dealerFactory;
 
     /**
      * CreateUpdating constructor.
      * @param InventorySynchronization $inventorySynchronization
-     * @param SupplierFactoryInterface $supplierFactory
+     * @param DealerFactoryInterface $dealerFactory
      */
     public function __construct(
         InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
         $this->inventorySynchronization = $inventorySynchronization;
-        $this->supplierFactory = $supplierFactory;
+        $this->dealerFactory = $dealerFactory;
     }
 
     /**
-     * @param string $supplierName
+     * @param string $dealerName
      * @throws Exception
      */
-    public function run($supplierName)
+    public function run($dealerName)
     {
-        $supplier = $this->supplierFactory->create($supplierName);
-		$matchedInDir = $this->inventorySynchronization->getMatchInDir($supplierName);
-		$matchedDoneDir = $this->inventorySynchronization->getMatchDoneDir($supplierName);
-		$updatingInDir = $this->inventorySynchronization->getUpdatingInDir($supplierName);
+        $dealer = $this->dealerFactory->create($dealerName);
+		$matchedInDir = $this->inventorySynchronization->getMatchInDir($dealerName);
+		$matchedDoneDir = $this->inventorySynchronization->getMatchDoneDir($dealerName);
+		$updatingInDir = $this->inventorySynchronization->getUpdatingInDir($dealerName);
 
         if (!is_dir($matchedInDir)) {
             mkdir($matchedInDir, 0755, true);
@@ -62,7 +62,7 @@ class CreateUpdating implements JobInterface
             $matchedDoneFile = $matchedDoneDir . $file->getFilename();
             $updatingInFile = $updatingInDir . $file->getFilename();
 
-            $supplier->createUpdating($matchedInFile, $updatingInFile);
+            $dealer->createUpdating($matchedInFile, $updatingInFile);
             if (!rename($matchedInFile, $matchedDoneFile)) {
                 throw new \Exception(sprintf("Can't move file %s to %s directory.", $matchedInFile, $matchedDoneFile));
             }

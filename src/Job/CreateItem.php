@@ -2,7 +2,7 @@
 
 namespace Brisum\InventorySynchronization\Job;
 
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
 use Exception;
@@ -17,33 +17,33 @@ class CreateItem implements JobInterface
 	protected $inventorySynchronization;
 
 	/**
-	 * @var SupplierFactoryInterface
+	 * @var DealerFactoryInterface
 	 */
-	protected $supplierFactory;
+	protected $dealerFactory;
 
 	/**
 	 * CreateItem constructor.
 	 * @param InventorySynchronization $inventorySynchronization
-	 * @param SupplierFactoryInterface $supplierFactory
+	 * @param DealerFactoryInterface $dealerFactory
 	 */
 	public function __construct(
 	    InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
 		$this->inventorySynchronization = $inventorySynchronization;
-		$this->supplierFactory = $supplierFactory;
+		$this->dealerFactory = $dealerFactory;
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @throws Exception
 	 */
-	public function run($supplierName)
+	public function run($dealerName)
 	{
-		$supplier = $this->supplierFactory->create($supplierName);
-		$newInDir = $this->inventorySynchronization->getNewInDir($supplierName);
-		$newDoneDir = $this->inventorySynchronization->getNewDoneDir($supplierName);
-		$newNotProcessedDir = $this->inventorySynchronization->getNewNotProcessedDir($supplierName);
+		$dealer = $this->dealerFactory->create($dealerName);
+		$newInDir = $this->inventorySynchronization->getNewInDir($dealerName);
+		$newDoneDir = $this->inventorySynchronization->getNewDoneDir($dealerName);
+		$newNotProcessedDir = $this->inventorySynchronization->getNewNotProcessedDir($dealerName);
 
 		if (!is_dir($newDoneDir)) {
 			mkdir($newDoneDir, 0755, true);
@@ -59,7 +59,7 @@ class CreateItem implements JobInterface
 			$newDoneFile = $newDoneDir . $file->getFilename();
 			$newNotProcessedFile = $newNotProcessedDir . $file->getFilename();
 
-			$supplier->createItem($newInFile, $newNotProcessedFile);
+			$dealer->createItem($newInFile, $newNotProcessedFile);
 			if (!rename($newInFile, $newDoneFile)) {
 				throw new Exception(sprintf("Can't move file %s to %s directory.", $file->getFilename(), $newDoneDir));
 			}

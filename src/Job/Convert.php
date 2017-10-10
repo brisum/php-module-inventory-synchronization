@@ -2,7 +2,7 @@
 
 namespace Brisum\InventorySynchronization\Job;
 
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
 use Exception;
@@ -17,33 +17,33 @@ class Convert implements JobInterface
 	protected $inventorySynchronization;
 
 	/**
-	 * @var SupplierFactoryInterface
+	 * @var DealerFactoryInterface
 	 */
-	protected $supplierFactory;
+	protected $dealerFactory;
 
 	/**
 	 * Convert constructor.
 	 * @param InventorySynchronization $inventorySynchronization
-	 * @param SupplierFactoryInterface $supplierFactory
+	 * @param DealerFactoryInterface $dealerFactory
 	 */
     public function __construct(
         InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
         $this->inventorySynchronization = $inventorySynchronization;
-        $this->supplierFactory = $supplierFactory;
+        $this->dealerFactory = $dealerFactory;
     }
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @throws Exception
 	 */
-	public function run($supplierName)
+	public function run($dealerName)
 	{
-		$supplier = $this->supplierFactory->create($supplierName);
-		$sourceInDir = $this->inventorySynchronization->getSourceInDir($supplierName);
-		$sourceDoneDir = $this->inventorySynchronization->getSourceDoneDir($supplierName);
-		$convertedInDir = $this->inventorySynchronization->getConvertInDir($supplierName);
+		$dealer = $this->dealerFactory->create($dealerName);
+		$sourceInDir = $this->inventorySynchronization->getSourceInDir($dealerName);
+		$sourceDoneDir = $this->inventorySynchronization->getSourceDoneDir($dealerName);
+		$convertedInDir = $this->inventorySynchronization->getConvertInDir($dealerName);
 
 		if (!is_dir($sourceDoneDir)) {
 			mkdir($sourceDoneDir, 0755, true);
@@ -57,9 +57,11 @@ class Convert implements JobInterface
 			/** @var SplFileInfo $file */
 			$sourceInFile = $file->getPathname();
 			$sourceDoneFile = $sourceDoneDir . $file->getFilename();
-			$convertedInFile = $convertedInDir . str_replace($file->getExtension(), '', $file->getFilename()) . 'json';
+			$convertedInFile = $file->isDir()
+                ? $convertedInDir . $file->getFilename()
+                : $convertedInDir . str_replace($file->getExtension(), '', $file->getFilename()) . 'json';
 
-			$supplier->convert($sourceInFile, $convertedInFile);
+			$dealer->convert($sourceInFile, $convertedInFile);
 			if (!rename($sourceInFile, $sourceDoneFile)) {
 				throw new Exception(sprintf("Can't move file %s to %s directory.", $file->getFilename(), $sourceDoneDir));
 			}

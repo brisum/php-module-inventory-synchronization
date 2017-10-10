@@ -2,7 +2,7 @@
 
 namespace Brisum\InventorySynchronization\Job;
 
-use Brisum\InventorySynchronization\SupplierFactoryInterface;
+use Brisum\InventorySynchronization\DealerFactoryInterface;
 use Brisum\InventorySynchronization\InventorySynchronization;
 use Brisum\InventorySynchronization\JobInterface;
 use Exception;
@@ -17,34 +17,34 @@ class Match implements JobInterface
 	protected $inventorySynchronization;
 
 	/**
-	 * @var SupplierFactoryInterface
+	 * @var DealerFactoryInterface
 	 */
-	protected $supplierFactory;
+	protected $dealerFactory;
 
 	/**
 	 * Match constructor.
 	 * @param InventorySynchronization $inventorySynchronization
-	 * @param SupplierFactoryInterface $supplierFactory
+	 * @param DealerFactoryInterface $dealerFactory
 	 */
     public function __construct(
         InventorySynchronization $inventorySynchronization,
-        SupplierFactoryInterface $supplierFactory
+        DealerFactoryInterface $dealerFactory
     ) {
         $this->inventorySynchronization = $inventorySynchronization;
-        $this->supplierFactory = $supplierFactory;
+        $this->dealerFactory = $dealerFactory;
     }
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @throws Exception
 	 */
-	public function run($supplierName)
+	public function run($dealerName)
 	{
-		$supplier = $this->supplierFactory->create($supplierName);
-		$convertedInDir = $this->inventorySynchronization->getConvertInDir($supplierName);
-		$convertedDoneDir = $this->inventorySynchronization->getConvertDoneDir($supplierName);
-		$matchedInDir = $this->inventorySynchronization->getMatchInDir($supplierName);
-		$newInDir = $this->inventorySynchronization->getNewInDir($supplierName);
+		$dealer = $this->dealerFactory->create($dealerName);
+		$convertedInDir = $this->inventorySynchronization->getConvertInDir($dealerName);
+		$convertedDoneDir = $this->inventorySynchronization->getConvertDoneDir($dealerName);
+		$matchedInDir = $this->inventorySynchronization->getMatchInDir($dealerName);
+		$newInDir = $this->inventorySynchronization->getNewInDir($dealerName);
 
 		if (!is_dir($convertedDoneDir)) {
 			mkdir($convertedDoneDir, 0755, true);
@@ -64,7 +64,7 @@ class Match implements JobInterface
 			$matchedInFile = $matchedInDir . $file->getFilename();
 			$newInFile = $newInDir . $file->getFilename();
 
-			$supplier->match($convertedInFile, $matchedInFile, $newInFile);
+			$dealer->match($convertedInFile, $matchedInFile, $newInFile);
 			if (!rename($convertedInFile, $convertedDoneFile)) {
 				throw new Exception(sprintf("Can't move file %s to %s directory.", $convertedInFile, $convertedDoneDir));
 			}

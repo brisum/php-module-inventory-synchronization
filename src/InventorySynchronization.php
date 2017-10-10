@@ -54,112 +54,112 @@ class InventorySynchronization
     }
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getSourceInDir($supplierName)
+	public function getSourceInDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_SOURCE_IN, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_SOURCE_IN, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getSourceDoneDir($supplierName)
+	public function getSourceDoneDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_SOURCE_DONE, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_SOURCE_DONE, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getConvertInDir($supplierName)
+	public function getConvertInDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_CONVERTED_IN, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_CONVERTED_IN, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getConvertDoneDir($supplierName)
+	public function getConvertDoneDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_CONVERTED_DONE, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_CONVERTED_DONE, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getMatchInDir($supplierName)
+	public function getMatchInDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_MATCHED_IN, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_MATCHED_IN, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getMatchDoneDir($supplierName)
+	public function getMatchDoneDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_MATCHED_DONE, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_MATCHED_DONE, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getUpdatingInDir($supplierName)
+	public function getUpdatingInDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_UPDATING_IN, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_UPDATING_IN, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getUpdatingDoneDir($supplierName)
+	public function getUpdatingDoneDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_UPDATING_DONE, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_UPDATING_DONE, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getNewInDir($supplierName)
+	public function getNewInDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_IN, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_IN, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getNewDoneDir($supplierName)
+	public function getNewDoneDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_DONE, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_DONE, $dealerName);
 
 	}
 
 	/**
-	 * @param string $supplierName
+	 * @param string $dealerName
 	 * @return string
 	 */
-	public function getNewNotProcessedDir($supplierName)
+	public function getNewNotProcessedDir($dealerName)
 	{
-		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_NOT_PROCESSED, $supplierName);
+		return $this->storageDir . sprintf(self::FORMAT_DIR_NEW_NOT_PROCESSED, $dealerName);
 
 	}
 }
